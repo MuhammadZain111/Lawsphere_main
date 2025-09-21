@@ -14,7 +14,7 @@ function CustomNavbar() {
   const navigate = useNavigate();
 
   const goToRegister = () => {
-    navigate('/registerLawyer');
+    navigate('/registration-selection');
   };
 
   return (
