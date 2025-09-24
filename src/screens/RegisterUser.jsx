@@ -1,21 +1,10 @@
-import React from 'react'
-import { useState } from "react";
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, User, Mail, Lock, Scale } from 'lucide-react';
+import { Eye, EyeOff, User, Mail, Lock } from 'lucide-react';
 
-function RegisterLawyer() {
+function RegisterUser() {
   const navigate = useNavigate();
-
-  const goToDashboard = () => {
-    navigate('/lawyerDashboard');  
-  };
-
-  const goBack = () => {
-    navigate('/registration-selection');
-  };
-
   const [isRegistering, setIsRegistering] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     firstname: '',
     lastname: '',
@@ -23,6 +12,8 @@ function RegisterLawyer() {
     password: '',
     confirmPassword: ''
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState({});
 
   const handleInputChange = (e) => {
@@ -81,15 +72,15 @@ function RegisterLawyer() {
 
     try {
       // Prepare data for API call
-      const lawyerData = {
+      const userData = {
         firstname: formData.firstname,
         lastname: formData.lastname,
         email: formData.email,
         password: formData.password,
-        userType: 'lawyer'
+        userType: 'user'
       };
 
-      console.log('Sending lawyer registration data:', lawyerData);
+      console.log('Sending user registration data:', userData);
 
       // Make API call to backend
       const response = await fetch('http://localhost:5000/api/v1/user/register', {
@@ -97,13 +88,13 @@ function RegisterLawyer() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(lawyerData),
+        body: JSON.stringify(userData),
       });
 
       const result = await response.json();
 
       if (response.ok) {
-        alert('Lawyer registration successful! You can now login.');
+        alert('User registration successful! You can now login.');
         // Reset form
         setFormData({
           firstname: '',
@@ -136,7 +127,7 @@ function RegisterLawyer() {
         password: formData.password
       };
 
-      console.log('Sending lawyer login data:', loginData);
+      console.log('Sending login data:', loginData);
 
       const response = await fetch('http://localhost:5000/api/v1/user/login', {
         method: 'POST',
@@ -151,9 +142,9 @@ function RegisterLawyer() {
       if (response.ok) {
         // Store token in localStorage
         localStorage.setItem('token', result.token);
-        localStorage.setItem('userType', result.userType || 'lawyer');
+        localStorage.setItem('userType', result.userType || 'user');
         alert('Login successful!');
-        goToDashboard();
+        navigate('/');
       } else {
         alert(result.message || 'Login failed. Please check your credentials.');
       }
@@ -163,19 +154,23 @@ function RegisterLawyer() {
     }
   };
 
+  const goBack = () => {
+    navigate('/registration-selection');
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50 flex items-center justify-center px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
-            <Scale className="w-8 h-8 text-green-600" />
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
+            <User className="w-8 h-8 text-blue-600" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            {isRegistering ? "Join as Lawyer" : "Lawyer Portal"}
+            {isRegistering ? "Create Account" : "Welcome Back"}
           </h1>
           <p className="text-gray-600">
-            {isRegistering ? "Connect with clients and grow your legal practice" : "Access your professional dashboard"}
+            {isRegistering ? "Join thousands of users accessing legal services" : "Sign in to continue to your account"}
           </p>
         </div>
 
@@ -198,7 +193,7 @@ function RegisterLawyer() {
                       className={`w-full pl-10 pr-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-0 transition-colors ${
                         errors.firstname 
                           ? 'border-red-300 focus:border-red-500' 
-                          : 'border-gray-200 focus:border-green-500'
+                          : 'border-gray-200 focus:border-blue-500'
                       }`}
                       placeholder="John"
                     />
@@ -222,9 +217,9 @@ function RegisterLawyer() {
                       className={`w-full pl-10 pr-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-0 transition-colors ${
                         errors.lastname 
                           ? 'border-red-300 focus:border-red-500' 
-                          : 'border-gray-200 focus:border-green-500'
+                          : 'border-gray-200 focus:border-blue-500'
                       }`}
-                      placeholder="Smith"
+                      placeholder="Doe"
                     />
                   </div>
                   {errors.lastname && (
@@ -248,9 +243,9 @@ function RegisterLawyer() {
                   className={`w-full pl-10 pr-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-0 transition-colors ${
                     errors.email 
                       ? 'border-red-300 focus:border-red-500' 
-                      : 'border-gray-200 focus:border-green-500'
+                      : 'border-gray-200 focus:border-blue-500'
                   }`}
-                  placeholder="lawyer@example.com"
+                  placeholder="john@example.com"
                 />
               </div>
               {errors.email && (
@@ -272,7 +267,7 @@ function RegisterLawyer() {
                   className={`w-full pl-10 pr-12 py-3 border-2 rounded-lg focus:outline-none focus:ring-0 transition-colors ${
                     errors.password 
                       ? 'border-red-300 focus:border-red-500' 
-                      : 'border-gray-200 focus:border-green-500'
+                      : 'border-gray-200 focus:border-blue-500'
                   }`}
                   placeholder="Enter your password"
                 />
@@ -301,17 +296,28 @@ function RegisterLawyer() {
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <input
-                    type="password"
+                    type={showConfirmPassword ? "text" : "password"}
                     name="confirmPassword"
                     value={formData.confirmPassword}
                     onChange={handleInputChange}
-                    className={`w-full pl-10 pr-4 py-3 border-2 rounded-lg focus:outline-none focus:ring-0 transition-colors ${
+                    className={`w-full pl-10 pr-12 py-3 border-2 rounded-lg focus:outline-none focus:ring-0 transition-colors ${
                       errors.confirmPassword 
                         ? 'border-red-300 focus:border-red-500' 
-                        : 'border-gray-200 focus:border-green-500'
+                        : 'border-gray-200 focus:border-blue-500'
                     }`}
                     placeholder="Confirm your password"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    {showConfirmPassword ? (
+                      <EyeOff className="w-5 h-5" />
+                    ) : (
+                      <Eye className="w-5 h-5" />
+                    )}
+                  </button>
                 </div>
                 {errors.confirmPassword && (
                   <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>
@@ -321,9 +327,9 @@ function RegisterLawyer() {
 
             <button
               type="submit"
-              className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3 rounded-lg font-semibold hover:from-green-700 hover:to-emerald-700 transform hover:scale-[1.02] transition-all duration-200 shadow-lg hover:shadow-xl"
+              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transform hover:scale-[1.02] transition-all duration-200 shadow-lg hover:shadow-xl"
             >
-              {isRegistering ? "Create Lawyer Account" : "Sign In"}
+              {isRegistering ? "Create Account" : "Sign In"}
             </button>
           </form>
 
@@ -332,7 +338,7 @@ function RegisterLawyer() {
               {isRegistering ? "Already have an account?" : "Don't have an account?"}{" "}
               <button
                 onClick={() => setIsRegistering(!isRegistering)}
-                className="text-green-600 hover:text-green-700 font-semibold transition-colors"
+                className="text-blue-600 hover:text-blue-700 font-semibold transition-colors"
               >
                 {isRegistering ? "Sign In" : "Create Account"}
               </button>
@@ -357,4 +363,4 @@ function RegisterLawyer() {
   );
 }
 
-export default RegisterLawyer;
+export default RegisterUser;
