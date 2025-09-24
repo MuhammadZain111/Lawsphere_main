@@ -56,7 +56,7 @@ import { ArrowRight, Scale } from "../../assets/icons/Icons.jsx"
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link to="/lawyers">
-                <Button size="lg" className="w-full bg-lightbrown   sm:w-auto group">
+                <Button size="lg" className="w-full bg-lightbrown sm:w-auto group">
                   Find a Lawyer
                   <ArrowRight className="ml-2 h-4 w-4 " />
                 </Button>
@@ -70,7 +70,9 @@ import { ArrowRight, Scale } from "../../assets/icons/Icons.jsx"
           </div>
           <div className="md:w-1/2 md:pl-10">
             <div className="relative rounded-lg overflow-hidden shadow-2xl hover:scale-[1.02] transition-transform duration-500">
-              <div className="absolute inset-0 bg-primary/10 mix-blend-multiply"></div>
+              <div className="absolute inset-0 bg-primary/10 mix-blend-multiply">
+              <h1>helllo</h1>
+              </div>
              
 
 
@@ -93,8 +95,6 @@ import { ArrowRight, Scale } from "../../assets/icons/Icons.jsx"
         </div>
       </div>
     </section>
-
-
 
     </div>
 
